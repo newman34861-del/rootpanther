@@ -157,6 +157,35 @@ export const emailTokens = pgTable(
   }),
 );
 
+/**
+ * Settings that belong to the person rather than the organisation, which is why neither
+ * of these carries org_id. A learner who later joins a team keeps their own help level,
+ * terminal size and SSH key.
+ */
+export const userPreferences = pgTable("user_preferences", {
+  userId: uuid("user_id")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  helpDefault: text("help_default").notNull().default("nudge"),
+  terminalFontSize: integer("terminal_font_size").notNull().default(14),
+  terminalTheme: text("terminal_theme").notNull().default("deep-space"),
+  emailSessionExpiry: boolean("email_session_expiry").notNull().default(true),
+  emailDebriefReady: boolean("email_debrief_ready").notNull().default(true),
+  emailNewScenarios: boolean("email_new_scenarios").notNull().default(false),
+  emailBilling: boolean("email_billing").notNull().default(true),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const labDefaults = pgTable("lab_defaults", {
+  userId: uuid("user_id")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  connection: text("connection").notNull().default("openvpn"),
+  teardown: text("teardown").notNull().default("idle"),
+  sshKey: text("ssh_key"),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 /** Lockout state is per identifier, so an unknown email cannot be used to probe accounts. */
 export const loginAttempts = pgTable(
   "login_attempts",

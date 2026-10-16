@@ -64,6 +64,11 @@ export async function setup(): Promise<void> {
 }
 
 async function start(): Promise<void> {
+  // initdb and its helpers inherit this environment and complain on stderr when the
+  // locale is unset, which is the normal state inside a slim container image.
+  process.env.LC_ALL ??= "C";
+  process.env.LANG ??= "C";
+
   const port = await freePort();
   dataDir = await mkdtemp(join(tmpdir(), "rootpanther-pg-"));
   server = new EmbeddedPostgres({

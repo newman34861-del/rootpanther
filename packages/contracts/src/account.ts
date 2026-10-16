@@ -46,6 +46,43 @@ export const notification = z.object({
 });
 export type Notification = z.infer<typeof notification>;
 
+export const profile = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string().email(),
+  emailVerified: z.boolean(),
+  /** Set while a change of address is waiting on the confirmation link. */
+  pendingEmail: z.string().email().nullable(),
+  country: z.string().nullable(),
+  handle: z.string().nullable(),
+  avatarUrl: z.string().nullable(),
+  initials: z.string(),
+  memberSince: isoDateTime,
+  deletionScheduledFor: isoDateTime.nullable(),
+});
+export type Profile = z.infer<typeof profile>;
+
+/**
+ * Why a handle was refused, so the form can say which rule was broken rather than only
+ * that something was wrong.
+ */
+export const handleAvailability = z.object({
+  handle: z.string(),
+  available: z.boolean(),
+  reason: z.enum(["taken", "reserved", "malformed", "unchanged"]).nullable(),
+});
+export type HandleAvailability = z.infer<typeof handleAvailability>;
+
+/** What deleting the account would take with it, shown before the learner confirms. */
+export const accountFootprint = z.object({
+  labSessions: z.number().int().nonnegative(),
+  proofs: z.number().int().nonnegative(),
+  reports: z.number().int().nonnegative(),
+  debriefs: z.number().int().nonnegative(),
+  onyxConversations: z.number().int().nonnegative(),
+});
+export type AccountFootprint = z.infer<typeof accountFootprint>;
+
 export const profileUpdate = z.object({
   name: z.string().trim().min(2).max(80),
   handle: z
@@ -72,6 +109,9 @@ export const preferencesUpdate = z.object({
   }),
 });
 export type PreferencesUpdate = z.infer<typeof preferencesUpdate>;
+/** A read returns exactly what a write accepts, so the settings form round-trips. */
+export const preferences = preferencesUpdate;
+export type Preferences = PreferencesUpdate;
 
 export const teardownPolicy = z.enum(["idle", "leave", "max-life"]);
 
@@ -81,3 +121,40 @@ export const labDefaultsUpdate = z.object({
   sshKey: z.string().nullable(),
 });
 export type LabDefaultsUpdate = z.infer<typeof labDefaultsUpdate>;
+export const labDefaults = labDefaultsUpdate;
+export type LabDefaults = LabDefaultsUpdate;
+
+export const PREFERENCE_DEFAULTS: Preferences = {
+  helpDefault: "nudge",
+  terminalFontSize: 14,
+  terminalTheme: "deep-space",
+  email: { sessionExpiry: true, debriefReady: true, newScenarios: false, billing: true },
+};
+
+export const LAB_DEFAULTS: LabDefaults = {
+  connection: "openvpn",
+  teardown: "idle",
+  sshKey: null,
+};
+
+/**
+ * Handles that are never issued, because they would let one learner be mistaken for the
+ * platform. Shared with the sign-up form so the refusal is shown before submitting, but
+ * the server is the one that decides.
+ */
+export const RESERVED_HANDLES = [
+  "admin",
+  "administrator",
+  "api",
+  "billing",
+  "help",
+  "onyx",
+  "operator",
+  "root",
+  "rootpanther",
+  "security",
+  "staff",
+  "support",
+  "system",
+  "www",
+] as const;
