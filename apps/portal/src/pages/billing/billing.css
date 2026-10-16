@@ -1,0 +1,513 @@
+.bo-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.bo-sectionlink {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.bo-dim {
+  color: var(--text-main);
+  font-weight: 400;
+}
+
+.rp-table td .bo-dim {
+  color: var(--text-main);
+}
+
+.bo-neg {
+  color: var(--text-header);
+}
+
+.bo-ext {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  color: var(--text-main);
+  vertical-align: middle;
+}
+
+.rp-table td a.bo-ext {
+  color: var(--text-main);
+}
+
+.bo-ext:hover,
+.rp-table td a.bo-ext:hover {
+  background: var(--hover-wash);
+  color: var(--text-header);
+}
+
+.bo-email {
+  font-weight: 450;
+}
+
+.rp-table td a.bo-email {
+  color: var(--text-header);
+  font-weight: 450;
+}
+
+.rp-table td a.bo-email:hover {
+  color: var(--primary-ink);
+}
+
+.bo-when {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.bo-when__note {
+  color: var(--text-main);
+  font-size: 12px;
+}
+
+.bo-when__note.is-cancel {
+  color: var(--med);
+}
+
+.bo-search {
+  width: 240px;
+}
+
+/* DataTable uses a fixed layout, so flexible columns need a floor or they collapse to zero. */
+.bo-t--queue .rp-table {
+  min-width: 1040px;
+}
+
+.bo-t--subs .rp-table {
+  min-width: 1060px;
+}
+
+.bo-t--inv .rp-table {
+  min-width: 1080px;
+}
+
+.bo-t--refunds .rp-table {
+  min-width: 1020px;
+}
+
+.bo-t--coupons .rp-table {
+  min-width: 1160px;
+}
+
+.bo-t--prices .rp-table {
+  min-width: 960px;
+}
+
+.bo-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-panel);
+}
+
+.bo-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.bo-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--border-dim);
+  border-radius: var(--r-lg);
+  background: var(--bg-panel);
+}
+
+[data-theme="light"] .bo-col {
+  border-color: var(--border);
+}
+
+.bo-col__head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  border-top: 2px solid var(--stage, var(--border));
+  border-bottom: 1px solid var(--divider);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+}
+
+[data-theme="light"] .bo-col__head {
+  border-bottom-color: var(--border);
+}
+
+.bo-col.is-failed-once {
+  --stage: var(--med);
+}
+
+.bo-col.is-second-retry {
+  --stage: var(--high);
+}
+
+.bo-col.is-final-retry,
+.bo-col.is-grace-ended {
+  --stage: var(--crit);
+}
+
+.bo-col__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bo-col__title h3 {
+  font-size: 13.5px;
+}
+
+.bo-col__count {
+  min-width: 20px;
+  height: 18px;
+  padding: 0 5px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text-header);
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.bo-col__sum {
+  margin-left: auto;
+  color: var(--text-header);
+  font-size: 12.5px;
+}
+
+.bo-col__detail {
+  color: var(--text-main);
+  font-size: 12px;
+}
+
+.bo-col__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  list-style: none;
+}
+
+.bo-col__none {
+  padding: 20px 14px;
+  color: var(--text-main);
+  font-size: 12.5px;
+  text-align: center;
+}
+
+.bo-dcard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-panel);
+}
+
+.bo-dcard.is-skeleton {
+  gap: 0;
+}
+
+.bo-dcard__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+
+.bo-dcard__email {
+  overflow: hidden;
+  color: var(--text-header);
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bo-dcard__email:hover {
+  color: var(--primary-ink);
+}
+
+.bo-dcard__amt {
+  flex: none;
+  color: var(--text-header);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.bo-dcard__ref {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: -4px;
+  color: var(--text-main);
+  font-size: 11.5px;
+}
+
+.bo-dcard__ref a {
+  color: var(--text-main);
+  text-decoration: underline;
+  text-decoration-color: var(--border-hover);
+  text-underline-offset: 2px;
+}
+
+.bo-dcard__ref a:hover {
+  color: var(--primary-ink);
+}
+
+.bo-dcard__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 12px;
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--divider);
+}
+
+.bo-dcard__facts div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.bo-dcard__facts dt {
+  color: var(--text-main);
+  font-size: 11.5px;
+}
+
+.bo-dcard__facts dd {
+  margin: 0;
+  overflow: hidden;
+  color: var(--text-header);
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bo-dcard__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.bo-dcard__resolve {
+  margin-left: auto;
+}
+
+.bo-case {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.bo-case__email {
+  overflow: hidden;
+  color: var(--text-header);
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bo-case__id {
+  overflow: hidden;
+  color: var(--text-main);
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bo-case__id .rp-mono {
+  font-size: 11.5px;
+}
+
+.bo-reason {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.bo-reason__main {
+  overflow: hidden;
+  color: var(--text-header);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bo-reason__note {
+  overflow: hidden;
+  color: var(--text-main);
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bo-due {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.35;
+  color: var(--text-header);
+}
+
+.bo-due__rel {
+  color: var(--text-main);
+  font-size: 11.5px;
+}
+
+.bo-due.is-soon,
+.bo-due.is-soon .bo-due__rel {
+  color: var(--crit-ink);
+}
+
+.bo-rowactions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.bo-evidence {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bo-evidence__set {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 16px 0 0;
+  border: 0;
+  border-top: 1px solid var(--divider);
+}
+
+.bo-evidence__set legend {
+  float: left;
+  width: 100%;
+  margin-bottom: 4px;
+  padding: 0;
+}
+
+.bo-evidence__note {
+  color: var(--text-main);
+  font-size: 12.5px;
+}
+
+.bo-records {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  scroll-margin-top: calc(var(--chrome-h, var(--top)) + 16px);
+}
+
+#dunning,
+#queue {
+  scroll-margin-top: calc(var(--chrome-h, var(--top)) + 16px);
+}
+
+.bo-records__panel {
+  min-width: 0;
+}
+
+.bo-plans {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bo-plans__body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bo-plans__skel {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.bo-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--divider);
+}
+
+.bo-meta__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+}
+
+.bo-meta__item {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  font-size: 12px;
+}
+
+.bo-meta__item dt {
+  height: 100%;
+  padding: 0 8px;
+  border-right: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text-main);
+  line-height: 24px;
+}
+
+.bo-meta__item dd {
+  margin: 0;
+  padding: 0 8px;
+  color: var(--text-header);
+}
+
+@media (max-width: 1279px) {
+  .bo-kpis,
+  .bo-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1023px) {
+  .bo-plans .rp-kv {
+    --cols: 2 !important;
+  }
+
+  .bo-plans__skel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .bo-kpis {
+    gap: 8px;
+  }
+
+  .bo-board {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bo-search {
+    width: 100%;
+  }
+}

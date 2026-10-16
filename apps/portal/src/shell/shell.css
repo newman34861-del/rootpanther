@@ -1,0 +1,87 @@
+.rp-shell--portal .rp-nav__item {
+  height: 34px;
+  font-size: 13px;
+}
+
+.rp-shell--portal .rp-topbar__center {
+  gap: 14px;
+}
+
+.ps-env {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid var(--chrome-border);
+  border-radius: var(--r-sm);
+  color: var(--chrome-ink);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.ps-env__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--crit);
+}
+
+.ps-session {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--chrome-border);
+  border-radius: var(--r-md);
+  color: var(--chrome-ink);
+  font-size: 12px;
+}
+
+.ps-session__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ps-session .rp-status {
+  color: var(--chrome-text);
+}
+
+.ps-session .rp-mono {
+  color: var(--chrome-text);
+}
+
+.ps-acct {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 12px 10px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.ps-acct__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ps-acct__name {
+  color: var(--text-header);
+  font-weight: 500;
+}
+
+.ps-acct__email {
+  overflow: hidden;
+  color: var(--text-main);
+  font-size: 11.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .ps-env {
+    display: none;
+  }
+}

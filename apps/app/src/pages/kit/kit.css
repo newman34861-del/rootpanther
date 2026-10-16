@@ -1,0 +1,142 @@
+.kt {
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.kt-index {
+  position: sticky;
+  top: calc(var(--chrome-h, var(--top)) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kt-index a {
+  padding: 6px 10px;
+  border-radius: var(--r-md);
+  color: var(--text-main);
+  font-size: 13px;
+}
+
+.kt-index a:hover {
+  background: var(--hover-wash);
+  color: var(--text-header);
+}
+
+.kt-body {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  min-width: 0;
+}
+
+.kt-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  scroll-margin-top: calc(var(--chrome-h, var(--top)) + 16px);
+}
+
+.kt-section > h2 {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 15px;
+}
+
+.kt-row {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.kt-row__label {
+  color: var(--text-main);
+  font-size: 12.5px;
+}
+
+.kt-row__items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.kt-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.kt-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.kt-grid--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.kt-w {
+  width: 220px;
+}
+
+.kt-onyx {
+  height: 560px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+}
+
+.kt-icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.kt-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-card);
+  color: var(--text-header);
+}
+
+.kt-icon span {
+  color: var(--text-main);
+  font-size: 10.5px;
+}
+
+@media (max-width: 1023px) {
+  .kt {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kt-index {
+    display: none;
+  }
+
+  .kt-grid--3,
+  .kt-grid--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .kt-grid,
+  .kt-grid--3,
+  .kt-grid--4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kt-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+}

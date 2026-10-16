@@ -1,0 +1,209 @@
+/*
+  Deep Space design tokens. The single source of colour for every app.
+  Section A is the brief, verbatim. Section B holds values the brief does not
+  define but the build needs (light-theme status colours, focus, tiers, brand
+  marks). Every value in section B is listed in README.md under "Derived tokens".
+*/
+
+@import "./fonts.css";
+
+:root {
+  /* A. Brief, dark (default) */
+  --bg-void: #0a1322;
+  --bg-app: #0e1829;
+  --bg-panel: #13203a;
+  --bg-card: #172442;
+  --bg-elevated: #1f2f52;
+  --border-dim: #1e2d4c;
+
+  --text-header: #e8edf5;
+  --text-main: #9ba8c2;
+  --text-muted: #5e6d87;
+  --on-solid: #f8fafc;
+
+  --primary: #38bdf8;
+  --primary-hover: #7dd3fc;
+  --primary-muted: #1d6fa5;
+  --premium: #df7234;
+  --premium-hover: #c45f28;
+
+  --success: #4fb891;
+  --info: #7d9bc4;
+  --med: #d3b258;
+  --high: #db8a4e;
+  --crit: #db7268;
+
+  --border: #27385b;
+  --border-hover: #37507a;
+  --divider: #1e2d4c;
+
+  --tint-primary: rgba(56, 189, 248, 0.1);
+  --tint-premium: rgba(223, 114, 52, 0.13);
+  --chrome-glass: rgba(20, 33, 60, 0.7);
+  --card-glass: rgba(24, 38, 69, 0.6);
+  --sso: #213a5c;
+
+  --shadow-panel: 0 1px 2px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.3);
+  --shadow-float: 0 1px 2px rgba(0, 0, 0, 0.45), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-modal: 0 18px 50px rgba(0, 0, 0, 0.6);
+  --shadow-control: 0 1px 2px rgba(0, 0, 0, 0.22);
+
+  --chrome-bg: var(--chrome-glass);
+  --chrome-text: var(--text-header);
+  --chrome-ink: var(--text-main);
+  --chrome-muted: var(--text-muted);
+  --chrome-active: rgba(56, 189, 248, 0.1);
+  --chrome-accent: var(--primary);
+  --chrome-border: var(--border);
+  --chrome-hover: rgba(255, 255, 255, 0.05);
+
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+
+  --rail: 232px;
+  --rail-collapsed: 64px;
+  --top: 60px;
+  --content-max: 1080px;
+
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --t-micro: 120ms;
+  --t-press: 90ms;
+  --t-view: 180ms;
+  --t-reveal: 280ms;
+
+  /* B. Derived, dark */
+  --focus: var(--primary);
+  --primary-ink: var(--primary);
+  --on-premium: var(--bg-void);
+  --on-primary: var(--bg-void);
+  --on-crit: var(--bg-void);
+  --crit-ink: color-mix(in srgb, var(--crit) 82%, var(--text-header));
+  --cta-hover: color-mix(in srgb, var(--premium) 88%, var(--text-header));
+  --scrim: rgba(5, 10, 20, 0.62);
+  --hover-wash: rgba(255, 255, 255, 0.04);
+  --press-wash: rgba(255, 255, 255, 0.07);
+  --tint-success: rgba(79, 184, 145, 0.12);
+  --tint-crit: rgba(219, 114, 104, 0.12);
+  --tint-med: rgba(211, 178, 88, 0.12);
+  --term-bg: var(--bg-void);
+  --term-fg: #c9d4e6;
+  --term-cursor: var(--primary);
+  --term-selection: rgba(56, 189, 248, 0.25);
+
+  --logo-tile: var(--bg-void);
+  --logo-edge: var(--border-hover);
+  --logo-from: var(--primary);
+  --logo-to: var(--premium);
+
+  --tier-1: var(--info);
+  --tier-2: var(--primary);
+  --tier-3: var(--med);
+  --tier-4: var(--high);
+
+  --chart-1: var(--primary);
+  --chart-2: #a78bfa;
+  --chart-3: #94a3b8;
+  --chart-grid: var(--divider);
+
+  --brand-google-blue: #4285f4;
+  --brand-google-red: #ea4335;
+  --brand-google-yellow: #fbbc05;
+  --brand-google-green: #34a853;
+  --brand-ms-red: #f25022;
+  --brand-ms-green: #7fba00;
+  --brand-ms-blue: #00a4ef;
+  --brand-ms-yellow: #ffb900;
+  --brand-github: #f0f6fc;
+  --brand-stripe: #635bff;
+
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  /* A. Brief, light */
+  --bg-void: #d5dce6;
+  --bg-app: #dde3ec;
+  --bg-panel: #fafbfc;
+  --bg-card: #ffffff;
+  --bg-elevated: #ffffff;
+  --border-dim: #e2e8f0;
+
+  --text-header: #0f1729;
+  --text-main: #334155;
+  --text-muted: #64748b;
+
+  --primary: #0284c7;
+  --premium: #c2410c;
+  --success: #15795a;
+  --border: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --divider: #eef1f6;
+
+  --chrome-bg: #1e3050;
+  --chrome-text: #e8edf5;
+  --chrome-ink: #c4d0e2;
+  --chrome-muted: #9fb0c9;
+  --chrome-active: #2a3d63;
+  --chrome-accent: var(--premium);
+  --chrome-border: rgba(255, 255, 255, 0.1);
+  --chrome-hover: rgba(255, 255, 255, 0.07);
+
+  /* B. Derived, light: the brief leaves these unset, and inheriting the dark
+     values fails AA on white */
+  --primary-hover: #0369a1;
+  --primary-muted: #7cb9de;
+  --premium-hover: #9a3412;
+  --info: #46618c;
+  --med: #7a5700;
+  --high: #9a4507;
+  --crit: #b42318;
+  --tint-primary: rgba(2, 132, 199, 0.08);
+  --tint-premium: rgba(194, 65, 12, 0.08);
+  --tint-success: rgba(21, 121, 90, 0.09);
+  --tint-crit: rgba(180, 35, 24, 0.08);
+  --tint-med: rgba(122, 87, 0, 0.09);
+  --card-glass: rgba(255, 255, 255, 0.8);
+  --sso: #ffffff;
+
+  --shadow-panel: 0 1px 2px rgba(15, 23, 41, 0.06), 0 1px 3px rgba(15, 23, 41, 0.05);
+  --shadow-float: 0 1px 2px rgba(15, 23, 41, 0.08), 0 8px 24px rgba(15, 23, 41, 0.12);
+  --shadow-modal: 0 18px 50px rgba(15, 23, 41, 0.28);
+  --shadow-control: 0 1px 2px rgba(15, 23, 41, 0.08);
+
+  --focus: var(--primary);
+  --primary-ink: #0369a1;
+  --on-premium: var(--on-solid);
+  --on-primary: var(--on-solid);
+  --on-crit: var(--on-solid);
+  --crit-ink: var(--crit);
+  --cta-hover: var(--premium-hover);
+  --scrim: rgba(15, 23, 41, 0.42);
+  --hover-wash: rgba(15, 23, 41, 0.04);
+  --press-wash: rgba(15, 23, 41, 0.07);
+  --term-bg: #0e1829;
+  --term-fg: #c9d4e6;
+  --term-cursor: #38bdf8;
+  --term-selection: rgba(56, 189, 248, 0.25);
+  --chart-2: #7c3aed;
+  --chart-3: #64748b;
+  --logo-tile: #0e1829;
+  --logo-edge: rgba(255, 255, 255, 0.14);
+  --logo-from: #38bdf8;
+  --logo-to: #df7234;
+  --brand-github: #1f2328;
+
+  color-scheme: light;
+}

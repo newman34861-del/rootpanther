@@ -1,0 +1,529 @@
+.ov-dash {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  container: ov / inline-size;
+}
+
+.ov-fresh {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 4px;
+  color: var(--text-main);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.ov-spin svg {
+  animation: ovSpin 0.8s linear infinite;
+}
+
+@keyframes ovSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ov-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@container ov (min-width: 700px) {
+  .ov-kpis {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@container ov (min-width: 940px) {
+  .ov-kpis {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@container ov (min-width: 1100px) {
+  .ov-kpis {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.ov-kpi.rp-kpi {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "label label"
+    "value value"
+    "delta spark"
+    "sub sub";
+  align-items: center;
+  gap: 0 8px;
+  padding: 14px 16px 12px;
+}
+
+.ov-kpi .rp-kpi__row,
+.ov-kpi .rp-kpi__foot {
+  display: contents;
+}
+
+.ov-kpi .rp-kpi__label {
+  grid-area: label;
+  font-size: 12px;
+}
+
+.ov-kpi .rp-kpi__value {
+  grid-area: value;
+  margin-top: 8px;
+  font-size: 22px;
+}
+
+.ov-kpi .rp-kpi__unit {
+  margin-left: 4px;
+  font-size: 12.5px;
+}
+
+.ov-kpi .rp-kpi__delta {
+  grid-area: delta;
+  align-self: end;
+  margin-top: 6px;
+  font-size: 11.5px;
+}
+
+.ov-kpi .rp-spark {
+  grid-area: spark;
+  margin-top: 6px;
+}
+
+.ov-kpi .rp-kpi__period {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.ov-kpi .rp-kpi__secondary {
+  grid-area: sub;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid var(--divider);
+  overflow: visible;
+  white-space: normal;
+}
+
+[data-theme="light"] .ov-kpi .rp-kpi__secondary {
+  border-top-color: var(--border);
+}
+
+.ov-sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 8px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.ov-sub__label {
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.ov-sub__value {
+  margin-left: auto;
+  color: var(--text-header);
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+
+.ov-sub__value.is-warn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--high);
+}
+
+.ov-kpi.is-skeleton {
+  box-shadow: var(--shadow-panel);
+}
+
+.ov-sk-label {
+  grid-area: label;
+  margin: 3px 0;
+}
+
+.ov-sk-value {
+  grid-area: value;
+  margin-top: 10px;
+}
+
+.ov-sk-delta {
+  grid-area: delta;
+  align-self: end;
+  margin-top: 10px;
+}
+
+.ov-sk-spark {
+  grid-area: spark;
+  margin-top: 6px;
+}
+
+.ov-sk-rows {
+  grid-area: sub;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 11px;
+  border-top: 1px solid var(--divider);
+}
+
+.ov-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.ov-grid > * {
+  grid-column: span 12;
+}
+
+@container ov (min-width: 700px) {
+  .ov-grid > .ov-span-4 {
+    grid-column: span 6;
+  }
+
+  .ov-grid > .ov-funnel {
+    order: 1;
+  }
+
+  .ov-grid > .ov-cohort,
+  .ov-grid > .ov-feedcard {
+    order: 2;
+  }
+}
+
+@container ov (min-width: 1100px) {
+  .ov-grid > .ov-span-8 {
+    grid-column: span 8;
+  }
+
+  .ov-grid > .ov-span-4 {
+    grid-column: span 4;
+  }
+
+  .ov-grid > .ov-funnel,
+  .ov-grid > .ov-cohort,
+  .ov-grid > .ov-feedcard {
+    order: 0;
+  }
+}
+
+.ov-meta-figs {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 12.5px;
+}
+
+.ov-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.ov-rev__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-bottom: 16px;
+  list-style: none;
+}
+
+.ov-rev__legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-main);
+  font-size: 12.5px;
+}
+
+.ov-rev__v {
+  color: var(--text-header);
+  font-size: 12.5px;
+}
+
+.ov-rev__share {
+  color: var(--text-main);
+  font-size: 11.5px;
+}
+
+.ov-rev > .rp-card__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.ov-rev__plot {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 244px;
+}
+
+.ov-rev__fill {
+  position: absolute;
+  inset: 0;
+}
+
+.ov-grid .rp-chart__area g > rect + rect {
+  stroke: var(--bg-card);
+  stroke-width: 2px;
+}
+
+.ov-barsk {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: end;
+  gap: 18px;
+  height: 244px;
+  padding: 12px 12px 26px 52px;
+}
+
+.ov-alerts-card {
+  scroll-margin-top: calc(var(--chrome-h, var(--top)) + 16px);
+}
+
+.ov-alerts {
+  list-style: none;
+}
+
+.ov-alert {
+  display: grid;
+  grid-template-columns: 7px minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px 20px 14px 24px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.ov-alert:last-child {
+  border-bottom: 0;
+}
+
+.ov-alert__dot.rp-status {
+  align-self: start;
+  height: 20px;
+}
+
+.ov-alert__skdot {
+  margin-top: 7px;
+}
+
+.ov-alert__skdot {
+  border-radius: 50%;
+}
+
+.ov-alert__body {
+  min-width: 0;
+}
+
+.ov-alert__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ov-alert__title {
+  color: var(--text-header);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ov-alert__time {
+  flex: none;
+  color: var(--text-main);
+  font-size: 11.5px;
+}
+
+.ov-alert__detail {
+  margin-top: 3px;
+  color: var(--text-main);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.ov-alert__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.ov-alert__sev {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ov-alert__act {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.ov-cohort .rp-heatmap tbody tr:first-child th,
+.ov-cohort .rp-heatmap tbody tr:first-child td {
+  border-bottom: 6px solid var(--bg-card);
+}
+
+.ov-cohort .rp-heatmap tbody tr:first-child th span:first-child {
+  font-weight: 600;
+}
+
+.ov-cohort .rp-heatmap th[scope="row"] {
+  white-space: nowrap;
+}
+
+.ov-cohort .rp-heatmap th[scope="row"] span {
+  display: inline-block;
+}
+
+.ov-cohort .rp-heatmap th[scope="row"] .rp-heatmap__meta {
+  min-width: 48px;
+  margin-left: 12px;
+  text-align: right;
+}
+
+.ov-cohort .rp-heatmap td {
+  height: 28px;
+}
+
+.ov-scale {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-main);
+  font-size: 11px;
+}
+
+.ov-scale__bar {
+  width: 96px;
+  height: 8px;
+  border-radius: calc(var(--r-sm) / 2);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--info) 6%, var(--bg-card)), color-mix(in srgb, var(--info) 80%, var(--bg-card)));
+}
+
+.ov-cohortsk {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ov-cohortsk__row {
+  display: grid;
+  grid-template-columns: 112px repeat(12, minmax(0, 1fr));
+  align-items: center;
+  gap: 2px;
+}
+
+.ov-fun {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style: none;
+}
+
+.ov-fun__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.ov-fun__label {
+  color: var(--text-main);
+  font-size: 13px;
+}
+
+.ov-fun__value {
+  color: var(--text-header);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.ov-fun__track {
+  height: 8px;
+  border-radius: calc(var(--r-sm) / 2);
+  background: var(--divider);
+}
+
+[data-theme="light"] .ov-fun__track {
+  background: var(--bg-void);
+}
+
+.ov-fun__bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--chart-1);
+}
+
+.ov-fun__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 5px;
+  color: var(--text-main);
+  font-size: 11px;
+}
+
+.ov-funnelsk {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ov-feedcard .rp-feed {
+  padding: 0 20px 0 24px;
+}
+
+.ov-feedcard .rp-feed__detail {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0;
+}
+
+@media (max-width: 767px) {
+  .ov-fresh {
+    order: 2;
+  }
+
+  .ov-alert {
+    padding: 12px 16px;
+  }
+
+  .ov-feedcard .rp-feed {
+    padding: 0 16px;
+  }
+
+  .ov-barsk {
+    gap: 8px;
+  }
+}

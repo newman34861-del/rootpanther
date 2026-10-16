@@ -1,0 +1,268 @@
+.db-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.db-help .rp-strong {
+  font-weight: 450;
+}
+
+.db-headline {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0 4px 16px;
+  border-left: 2px solid var(--premium);
+}
+
+.db-headline__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  color: var(--text-main);
+  font-size: 12.5px;
+}
+
+.db-headline__role {
+  color: var(--premium);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.db-headline__text {
+  max-width: 64ch;
+  color: var(--text-header);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.45;
+}
+
+.db-path {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+
+.db-path li {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  padding-bottom: 16px;
+}
+
+.db-path li:last-child {
+  padding-bottom: 0;
+}
+
+.db-path li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 28px;
+  bottom: 4px;
+  left: 11.5px;
+  width: 1px;
+  background: var(--border);
+}
+
+.db-path__n {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border-hover);
+  border-radius: var(--r-sm);
+  color: var(--text-header);
+  font-size: 11.5px;
+}
+
+.db-path__text {
+  padding-top: 2px;
+  color: var(--text-header);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.db-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.db-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  list-style: none;
+}
+
+.db-list--missed {
+  gap: 0;
+}
+
+.db-list--missed .db-list__item + .db-list__item {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--divider);
+}
+
+.db-list__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--text-header);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.db-list__icon {
+  flex: none;
+  margin-top: 3px;
+}
+
+.db-list__icon.is-well {
+  color: var(--text-main);
+}
+
+.db-list__icon.is-miss {
+  color: var(--med);
+}
+
+.db-miss {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.db-miss__text {
+  color: var(--text-header);
+  font-weight: 500;
+}
+
+.db-miss__why {
+  color: var(--text-main);
+  font-size: 13px;
+}
+
+.db-miss__label {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.db-drills {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+
+.db-drills li + li {
+  border-top: 1px solid var(--divider);
+}
+
+.db-drill {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 16px;
+  min-height: 52px;
+  padding: 0 20px 0 24px;
+  color: inherit;
+  transition: background-color var(--t-micro) ease;
+}
+
+.db-drill:hover {
+  background: var(--hover-wash);
+  color: inherit;
+}
+
+.db-drill:focus-visible {
+  outline-offset: -2px;
+}
+
+.db-drills li:last-child .db-drill {
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+}
+
+.db-drill__kind {
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.db-drill__label {
+  color: var(--primary-ink);
+  font-weight: 500;
+}
+
+.db-drill__go {
+  color: var(--text-main);
+  transition: transform var(--t-micro) ease, color var(--t-micro) ease;
+}
+
+.db-drill:hover .db-drill__go {
+  color: var(--text-header);
+  transform: translateX(2px);
+}
+
+.db-skcard__body {
+  padding: var(--s5);
+}
+
+@media (max-width: 1023px) {
+  .db-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .db-page .rp-pagehead__actions {
+    width: 100%;
+  }
+
+  .db-page .rp-pagehead__actions .rp-btn {
+    flex: 1 1 auto;
+  }
+
+  .db-headline__text {
+    font-size: 16px;
+  }
+
+  .db-drill {
+    grid-template-columns: minmax(0, 1fr) 16px;
+    gap: 2px 12px;
+    padding: 12px 16px;
+  }
+
+  .db-drill__kind {
+    grid-column: 1;
+  }
+
+  .db-drill__label {
+    grid-column: 1;
+  }
+
+  .db-drill__go {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .db-skcard__body {
+    padding: var(--s4);
+  }
+}

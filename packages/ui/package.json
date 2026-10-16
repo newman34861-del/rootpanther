@@ -1,0 +1,20 @@
+{
+  "name": "@rootpanther/ui",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": ["*.css"],
+  "exports": {
+    ".": "./index.ts",
+    "./terminal": "./terminal.ts",
+    "./styles.css": "./styles.css",
+    "./fonts.css": "./fonts.css"
+  },
+  "dependencies": {
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/addon-search": "^0.15.0",
+    "@xterm/xterm": "^5.5.0",
+    "qrcode": "^1.5.4"
+  },
+  "peerDependencies": { "react": "^18.3.1", "react-dom": "^18.3.1" }
+}

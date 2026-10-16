@@ -1,0 +1,268 @@
+.rl-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s4);
+}
+
+.rl-panel:focus-visible {
+  outline-offset: 4px;
+  border-radius: var(--r-lg);
+}
+
+.rl-title {
+  color: var(--text-header);
+  font-weight: 500;
+}
+
+.rl-title:hover {
+  color: var(--primary-ink);
+}
+
+.rl-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 0;
+}
+
+.rl-new {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rl-new__scen {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.rl-new__hint {
+  color: var(--text-main);
+  font-size: 12.5px;
+}
+
+.rl-new__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  margin-top: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-card);
+}
+
+[data-theme="light"] .rl-new__list {
+  background: var(--bg-panel);
+}
+
+.rl-new .rp-select {
+  display: flex;
+}
+
+.rl-debcard {
+  overflow: hidden;
+}
+
+.rl-deb {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+
+.rl-deb > li + li {
+  border-top: 1px solid var(--divider);
+}
+
+.rl-deb__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 52px 16px 20px;
+  color: inherit;
+  transition: background-color var(--t-micro) ease;
+}
+
+.rl-deb__row:hover {
+  background: var(--hover-wash);
+  color: inherit;
+}
+
+.rl-deb__row:focus-visible {
+  outline-offset: -2px;
+}
+
+.rl-deb__main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.rl-deb__top {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.rl-deb__name {
+  color: var(--text-header);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.rl-deb__date {
+  color: var(--text-main);
+  font-size: 12.5px;
+}
+
+.rl-deb__headline {
+  overflow: hidden;
+  color: var(--text-main);
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.rl-deb__facts {
+  display: grid;
+  grid-template-columns: 96px 80px;
+  gap: 16px;
+}
+
+.rl-deb__fact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rl-deb__label {
+  color: var(--text-main);
+  font-size: 11.5px;
+}
+
+.rl-deb__value {
+  color: var(--text-header);
+  font-size: 13px;
+}
+
+.rl-deb__go {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  color: var(--text-main);
+  transform: translateY(-50%);
+  transition: transform var(--t-micro) ease, color var(--t-micro) ease;
+}
+
+.rl-deb__row:hover .rl-deb__go {
+  color: var(--text-header);
+  transform: translate(2px, -50%);
+}
+
+.rl-deb__sk {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 52px 20px 20px;
+}
+
+.rl-deb__sk-main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rl-listcard {
+  overflow: hidden;
+}
+
+.rl-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+
+.rl-list > li + li {
+  border-top: 1px solid var(--divider);
+}
+
+.rl-list__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 12px 14px 16px;
+}
+
+.rl-list__main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.rl-list__title {
+  font-size: 14px;
+}
+
+.rl-list__main .rl-tags {
+  padding: 0;
+}
+
+.rl-list__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  color: var(--text-main);
+  font-size: 12.5px;
+}
+
+.rl-list__sk {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 16px;
+}
+
+@media (max-width: 767px) {
+  .rl-new__list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rl-deb__row,
+  .rl-deb__sk {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 14px 44px 14px 16px;
+  }
+
+  .rl-deb__headline {
+    white-space: normal;
+  }
+
+  .rl-deb__facts {
+    display: flex;
+    gap: 20px;
+  }
+
+  .rl-deb__fact {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .rl-deb__go {
+    right: 16px;
+  }
+}

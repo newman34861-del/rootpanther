@@ -1,0 +1,23 @@
+{
+  "name": "rootpanther",
+  "private": true,
+  "type": "module",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "dev:app": "npm run dev -w @rootpanther/app",
+    "dev:portal": "npm run dev -w @rootpanther/portal",
+    "build": "npm run build -w @rootpanther/app && npm run build -w @rootpanther/portal",
+    "typecheck": "tsc -p packages/contracts && tsc -p packages/ui && tsc -p apps/app && tsc -p apps/portal && tsc -p apps/api",
+    "check:rules": "node scripts/check-rules.mjs",
+    "check:contrast": "node scripts/contrast-report.mjs",
+    "icons": "node scripts/build-icons.mjs"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
+}

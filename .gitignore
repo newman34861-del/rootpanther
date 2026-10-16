@@ -1,0 +1,28 @@
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Secrets and local configuration. Nothing in here is ever committed.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.ovpn
+secrets/
+
+# Terraform state carries credentials in plain text.
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+!*.tfvars.example
+
+# Local capture output from the screenshot tooling.
+shots/
+out/
+
+.DS_Store
+*.log
