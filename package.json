@@ -13,7 +13,9 @@
     "icons": "node scripts/build-icons.mjs"
   },
   "devDependencies": {
+    "@swc/core": "^1.16.18",
     "@types/qrcode": "^1.5.5",
+    "unplugin-swc": "^2.0.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",

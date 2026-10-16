@@ -26,11 +26,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@rootpanther/contracts": "*",
-    "@swc/core": "^1.16.18",
     "@types/node": "^22.10.1",
     "drizzle-kit": "^0.31.11",
-    "unplugin-swc": "^2.0.0",
     "vitest": "^2.1.8"
   }
 }
