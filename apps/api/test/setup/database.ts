@@ -5,6 +5,7 @@ import { join } from "node:path";
 import EmbeddedPostgres from "embedded-postgres";
 import postgres from "postgres";
 import { runMigrations } from "../../src/db/migrations";
+import { seedCatalogue } from "../../src/db/seed-catalogue";
 
 /**
  * Brings up the database the suite needs, so that running the tests takes no setup.
@@ -54,9 +55,19 @@ async function freePort(): Promise<number> {
 }
 
 export async function setup(): Promise<void> {
-  if (process.env.TEST_DATABASE_URL) return;
   try {
-    await start();
+    if (!process.env.TEST_DATABASE_URL) await start();
+    // Seeded whether the server was started here or supplied from outside. Catalogue
+    // tests that silently found an empty table would pass their negative assertions and
+    // tell us nothing.
+    const url = process.env.TEST_ADMIN_URL ?? process.env.TEST_DATABASE_URL;
+    if (!url) throw new Error("TEST_DATABASE_URL is set but TEST_ADMIN_URL is not");
+    const seeding = postgres(url, { max: 1, prepare: false, onnotice: remember });
+    try {
+      await seedCatalogue(seeding);
+    } finally {
+      await seeding.end();
+    }
   } catch (err) {
     process.stderr.write(`${recent.join("\n")}\n`);
     throw err;

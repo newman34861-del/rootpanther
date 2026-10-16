@@ -8,7 +8,8 @@
     "dev": "tsc -p tsconfig.build.json --watch",
     "migrate": "node dist/apps/api/src/db/migrate.js",
     "db:generate": "drizzle-kit generate",
-    "test": "vitest run"
+    "test": "vitest run",
+    "seed": "node dist/apps/api/src/db/seed.js"
   },
   "dependencies": {
     "@fastify/cookie": "^9.4.0",

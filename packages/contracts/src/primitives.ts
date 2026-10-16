@@ -3,6 +3,16 @@ import { z } from "zod";
 export const tierCode = z.enum(["C1", "C2", "C3", "C4"]);
 export type TierCode = z.infer<typeof tierCode>;
 
+/** Ascending. The order is the progression, and the catalogue sorts by distance along it. */
+export const TIER_ORDER: readonly TierCode[] = ["C1", "C2", "C3", "C4"] as const;
+
+export const TIER_NAMES: Record<TierCode, string> = {
+  C1: "Apprentice",
+  C2: "Practitioner",
+  C3: "Adept",
+  C4: "Master",
+};
+
 export const scenarioType = z.enum(["ad-set", "standalone", "exam-sim"]);
 export type ScenarioType = z.infer<typeof scenarioType>;
 

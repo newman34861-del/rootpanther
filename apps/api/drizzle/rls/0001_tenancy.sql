@@ -41,7 +41,7 @@ revoke all on function app_orgs_for_user(uuid) from public;
 do $$
 declare t text;
 begin
-  foreach t in array array['memberships']
+  foreach t in array array['memberships', 'scenario_progress', 'learner_tier']
   loop
     execute format('alter table %I enable row level security', t);
     execute format('alter table %I force row level security', t);

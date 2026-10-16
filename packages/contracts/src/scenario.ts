@@ -88,6 +88,16 @@ export const groundingCell = z.object({
 });
 export type GroundingCell = z.infer<typeof groundingCell>;
 
+/** Buckets rather than a range, because that is what the filter panel offers. */
+export const durationBucket = z.enum(["under-2h", "2h-4h", "over-4h"]);
+export type DurationBucket = z.infer<typeof durationBucket>;
+
+export const hostBucket = z.enum(["1", "2-3", "4-plus"]);
+export type HostBucket = z.infer<typeof hostBucket>;
+
+export const catalogueSort = z.enum(["recommended", "newest", "difficulty", "duration"]);
+export type CatalogueSort = z.infer<typeof catalogueSort>;
+
 export const catalogueQuery = z.object({
   q: z.string().trim().max(200).optional(),
   type: z.array(scenarioType).optional(),
@@ -95,23 +105,38 @@ export const catalogueQuery = z.object({
   technique: z.array(techniqueFamily).optional(),
   os: z.array(osFamily).optional(),
   status: z.array(progressStatus).optional(),
-  sort: z.enum(["recommended", "newest", "difficulty", "duration"]).default("recommended"),
+  duration: z.array(durationBucket).optional(),
+  hosts: z.array(hostBucket).optional(),
+  sort: catalogueSort.default("recommended"),
   page: z.number().int().positive().default(1),
   perPage: z.number().int().positive().max(100).default(50),
 });
 export type CatalogueQuery = z.infer<typeof catalogueQuery>;
 
 export const facetCount = z.object({ value: z.string(), count: z.number().int().nonnegative() });
+export type FacetCount = z.infer<typeof facetCount>;
+
+/**
+ * Counts are taken with every filter applied except the one being counted. A tier count
+ * that already had the tier filter applied would read zero for every tier the learner
+ * has not ticked, which makes the panel useless for discovering what else is there.
+ */
+export const catalogueFacets = z.object({
+  type: z.array(facetCount),
+  tier: z.array(facetCount),
+  technique: z.array(facetCount),
+  os: z.array(facetCount),
+  status: z.array(facetCount),
+  duration: z.array(facetCount),
+  hosts: z.array(facetCount),
+});
+export type CatalogueFacets = z.infer<typeof catalogueFacets>;
 
 export const catalogueResponse = z.object({
   scenarios: z.array(scenario),
   total: z.number().int().nonnegative(),
-  facets: z.object({
-    type: z.array(facetCount),
-    tier: z.array(facetCount),
-    technique: z.array(facetCount),
-    os: z.array(facetCount),
-    status: z.array(facetCount),
-  }),
+  page: z.number().int().positive(),
+  perPage: z.number().int().positive(),
+  facets: catalogueFacets,
 });
 export type CatalogueResponse = z.infer<typeof catalogueResponse>;
