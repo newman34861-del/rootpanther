@@ -1,0 +1,145 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Typecheck, rules and frontend build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck every project
+        run: npm run typecheck
+
+      # The house rules are enforced here rather than by review: no em dashes, no
+      # marketing copy, no colour values outside the theme.
+      - name: House rules
+        run: npm run check:rules
+
+      - name: Build both frontends
+        run: npm run build
+
+      - name: Build the API
+        run: npm run build -w @rootpanther/api
+
+  test:
+    name: API tests against Postgres
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: rootpanther
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: rootpanther
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build the API
+        run: npm run build -w @rootpanther/api
+
+      # The roles mirror production: migrations run as an admin, the application
+      # connects as a restricted role that cannot bypass row-level security, and a
+      # separate bypass role exists only so tests can seed across organisations.
+      - name: Create database roles
+        run: |
+          psql -v ON_ERROR_STOP=1 <<'SQL'
+          create role rp_app login password 'apppw';
+          create role rp_admin login password 'adminpw' bypassrls;
+          grant all privileges on database rootpanther to rp_admin;
+          SQL
+
+      - name: Run migrations
+        working-directory: apps/api
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/rootpanther
+          APP_ORIGIN: https://app.rootpanther.com
+          PORTAL_ORIGIN: https://portal.rootpanther.com
+          API_ORIGIN: https://api.rootpanther.com
+          COOKIE_DOMAIN: .rootpanther.com
+          SESSION_SECRET: ci-session-secret-not-used-for-anything-real
+        run: node dist/apps/api/src/db/migrate.js
+
+      - name: Grant the application role
+        run: |
+          psql -v ON_ERROR_STOP=1 <<'SQL'
+          grant rootpanther_api to rp_app;
+          grant all privileges on all tables in schema public to rp_admin;
+          grant usage on schema public to rp_admin;
+          SQL
+
+      - name: Test
+        working-directory: apps/api
+        env:
+          DATABASE_URL: postgres://rp_app:apppw@localhost:5432/rootpanther
+          TEST_DATABASE_URL: postgres://rp_app:apppw@localhost:5432/rootpanther
+          TEST_ADMIN_URL: postgres://rp_admin:adminpw@localhost:5432/rootpanther
+          APP_ORIGIN: https://app.rootpanther.com
+          PORTAL_ORIGIN: https://portal.rootpanther.com
+          API_ORIGIN: https://api.rootpanther.com
+          COOKIE_DOMAIN: .rootpanther.com
+          SESSION_SECRET: ci-session-secret-not-used-for-anything-real
+          OAUTH_GOOGLE_CLIENT_ID: ci-google-id
+          OAUTH_GOOGLE_CLIENT_SECRET: ci-google-secret
+          OAUTH_GITHUB_CLIENT_ID: ci-github-id
+          OAUTH_GITHUB_CLIENT_SECRET: ci-github-secret
+          LOG_LEVEL: error
+        run: npx vitest run
+
+  terraform:
+    name: Terraform validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+
+      - name: Format
+        working-directory: infra
+        run: terraform fmt -check -recursive
+
+      # No backend and no credentials: this checks the configuration is sound without
+      # touching state or the subscription. Plan and apply are a separate, gated step.
+      - name: Validate
+        working-directory: infra
+        run: |
+          terraform init -backend=false -input=false
+          terraform validate
