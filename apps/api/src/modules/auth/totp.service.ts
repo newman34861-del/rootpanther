@@ -45,7 +45,10 @@ export class TotpService {
   async confirmSetup(userId: string, email: string, code: string): Promise<string[] | null> {
     const secret = await this.secretFor(userId);
     if (!secret) return null;
-    if (!this.build(secret, email).validate({ token: code, window: 1 })) return null;
+    // validate returns the offset in time steps, so a code for the current step comes
+    // back as 0. Testing it for truthiness rejects exactly the codes that are right on
+    // time, which is nearly all of them.
+    if (this.build(secret, email).validate({ token: code, window: 1 }) === null) return null;
 
     await this.db.execute(sql`
       update totp_secrets set enabled_at = now() where user_id = ${userId}

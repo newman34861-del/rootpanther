@@ -75,6 +75,20 @@ export const totpSetup = z.object({
 });
 export type TotpSetup = z.infer<typeof totpSetup>;
 
+/**
+ * Turning two factor off asks for the first factor again, so a borrowed open browser is
+ * not enough to remove it. An account that signed up through a provider has no password
+ * to give, which is why this is optional rather than required.
+ */
+export const disableTotpRequest = z.object({
+  currentPassword: z.string().max(AUTH_POLICY.passwordMaxLength).optional(),
+});
+export type DisableTotpRequest = z.infer<typeof disableTotpRequest>;
+
+/** Shown once, on generation. They are stored hashed and cannot be read back. */
+export const recoveryCodeList = z.object({ codes: z.array(z.string()) });
+export type RecoveryCodeList = z.infer<typeof recoveryCodeList>;
+
 export const deviceSession = z.object({
   id: z.string(),
   device: z.string().nullable(),

@@ -38,6 +38,8 @@ const COMMON = new Set([
   "rootpanther",
   "kalilinux",
   "oscp2026",
+  "offsecoscp",
+  "correcthorsebatterystaple",
 ]);
 
 @Injectable()
@@ -98,7 +100,11 @@ export class PasswordService {
   }
 
   private isCommon(lower: string, personal: string[]): boolean {
-    if (COMMON.has(lower)) return true;
+    // Compared against the root as well as the whole string. Appending digits to a
+    // password everyone already guesses is the most common way of meeting a length rule,
+    // and an exact-match list lets "password1234" through while refusing "password123".
+    const root = lower.replace(/[^a-z0-9]/g, "").replace(/\d+$/, "");
+    if (COMMON.has(lower) || COMMON.has(root)) return true;
     // A password built from the learner's own email or name is guessable by anyone
     // holding the signup record.
     return personal.some((token) => token.length >= 4 && lower.includes(token.toLowerCase()));
