@@ -40,27 +40,6 @@ jobs:
   test:
     name: API tests against Postgres
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: rootpanther
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
-
-    env:
-      PGHOST: localhost
-      PGUSER: postgres
-      PGPASSWORD: postgres
-      PGDATABASE: rootpanther
-
     steps:
       - uses: actions/checkout@v4
 
@@ -71,55 +50,12 @@ jobs:
 
       - run: npm ci
 
-      - name: Build the API
-        run: npm run build -w @rootpanther/api
-
-      # The roles mirror production: migrations run as an admin, the application
-      # connects as a restricted role that cannot bypass row-level security, and a
-      # separate bypass role exists only so tests can seed across organisations.
-      - name: Create database roles
-        run: |
-          psql -v ON_ERROR_STOP=1 <<'SQL'
-          create role rp_app login password 'apppw';
-          create role rp_admin login password 'adminpw' bypassrls;
-          grant all privileges on database rootpanther to rp_admin;
-          SQL
-
-      - name: Run migrations
-        working-directory: apps/api
-        env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/rootpanther
-          APP_ORIGIN: https://app.rootpanther.com
-          PORTAL_ORIGIN: https://portal.rootpanther.com
-          API_ORIGIN: https://api.rootpanther.com
-          COOKIE_DOMAIN: .rootpanther.com
-          SESSION_SECRET: ci-session-secret-not-used-for-anything-real
-        run: node dist/apps/api/src/db/migrate.js
-
-      - name: Grant the application role
-        run: |
-          psql -v ON_ERROR_STOP=1 <<'SQL'
-          grant rootpanther_api to rp_app;
-          grant all privileges on all tables in schema public to rp_admin;
-          grant usage on schema public to rp_admin;
-          SQL
-
+      # The suite brings up its own Postgres, creates the production role shape and runs
+      # the migrations, so CI runs the same path a developer runs. A service container
+      # and a column of env vars here would be a second setup to keep in step with the
+      # first, and the two would drift.
       - name: Test
         working-directory: apps/api
-        env:
-          DATABASE_URL: postgres://rp_app:apppw@localhost:5432/rootpanther
-          TEST_DATABASE_URL: postgres://rp_app:apppw@localhost:5432/rootpanther
-          TEST_ADMIN_URL: postgres://rp_admin:adminpw@localhost:5432/rootpanther
-          APP_ORIGIN: https://app.rootpanther.com
-          PORTAL_ORIGIN: https://portal.rootpanther.com
-          API_ORIGIN: https://api.rootpanther.com
-          COOKIE_DOMAIN: .rootpanther.com
-          SESSION_SECRET: ci-session-secret-not-used-for-anything-real
-          OAUTH_GOOGLE_CLIENT_ID: ci-google-id
-          OAUTH_GOOGLE_CLIENT_SECRET: ci-google-secret
-          OAUTH_GITHUB_CLIENT_ID: ci-github-id
-          OAUTH_GITHUB_CLIENT_SECRET: ci-github-secret
-          LOG_LEVEL: error
         run: npx vitest run
 
   terraform:

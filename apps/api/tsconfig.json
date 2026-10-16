@@ -17,7 +17,11 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@rootpanther/contracts": ["../../packages/contracts/index.ts"]
+      "@rootpanther/contracts": ["../../packages/contracts/index.ts"],
+      // Publishes its types through an "exports" map, which classic Node resolution
+      // cannot read. Pointed at directly rather than moving the whole API onto node16
+      // resolution for the sake of one test-only dependency.
+      "embedded-postgres": ["../../node_modules/embedded-postgres/dist/index.d.ts"]
     },
     "types": ["node"]
   },
