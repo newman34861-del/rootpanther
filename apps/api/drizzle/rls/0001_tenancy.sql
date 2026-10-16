@@ -17,6 +17,25 @@ language sql stable as $$
   select coalesce(current_setting('app.cross_org', true), 'off') = 'on'
 $$;
 
+-- Resolves which organisations a user belongs to, for the one moment when that cannot
+-- be read through a policy: a request arrives with a session cookie and nothing has set
+-- app.org_id yet, because the value it needs is the answer to this question.
+--
+-- security definer, and deliberately narrow. It takes a user id and returns only
+-- organisation ids, so the worst it can do for a caller holding somebody else's user id
+-- is name the organisations that user is in. Everything downstream still goes through
+-- the policies, scoped to whichever of these the session was issued for.
+create or replace function app_orgs_for_user(p_user uuid)
+returns table (org_id uuid, role text)
+language sql stable security definer set search_path = public as $$
+  select m.org_id, m.role
+    from memberships m
+   where m.user_id = p_user
+   order by m.created_at
+$$;
+
+revoke all on function app_orgs_for_user(uuid) from public;
+
 -- Organisation-scoped tables. Every table added later that carries org_id must be
 -- registered here; the orphan check below fails the build if one is missed.
 do $$
@@ -59,6 +78,10 @@ alter default privileges in schema public
   grant select, insert, update, delete on tables to rootpanther_api;
 alter default privileges in schema public
   grant usage, select on sequences to rootpanther_api;
+
+-- Granted by name rather than through a blanket grant on all functions, so that adding
+-- another security definer function later is a decision rather than an inheritance.
+grant execute on function app_orgs_for_user(uuid) to rootpanther_api;
 
 -- Stated explicitly rather than relied on as a default, because this one attribute
 -- would silently disable every policy above.

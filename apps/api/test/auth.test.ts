@@ -211,3 +211,56 @@ describe("password reset", () => {
     expect(a.json()).toEqual(b.json());
   });
 });
+
+describe("the organisation a session acts in", () => {
+  it("is the one created with the account, and is not another learner's", async () => {
+    const mine = unique();
+    const theirs = unique();
+    const a = await signUp(mine);
+    await signUp(theirs);
+
+    const [session] = await admin`
+      select s.active_org_id, o.public_id
+        from auth_sessions s
+        join users u on u.id = s.user_id
+        join organizations o on o.id = s.active_org_id
+       where u.email = ${mine}
+    `;
+    expect(session.active_org_id).toBeTruthy();
+    expect(session.public_id).toMatch(/^org_/);
+
+    const [other] = await admin`
+      select m.org_id from memberships m
+        join users u on u.id = m.user_id
+       where u.email = ${theirs}
+    `;
+    expect(session.active_org_id).not.toBe(other.org_id);
+    expect(cookieFrom(a.headers, "rp_session")).toBeTruthy();
+  });
+
+  it("resolves a session that predates the column rather than signing the learner out", async () => {
+    const email = unique();
+    const res = await signUp(email);
+    const token = cookieFrom(res.headers, "rp_session") ?? "";
+
+    // The state a session issued before 0003 is in. It has to keep working.
+    await admin`
+      update auth_sessions s set active_org_id = null
+        from users u where u.id = s.user_id and u.email = ${email}
+    `;
+
+    const after = await app.inject({
+      method: "GET",
+      url: "/auth/sessions",
+      cookies: { rp_session: token },
+    });
+    expect(after.statusCode).toBe(200);
+
+    const [repaired] = await admin`
+      select s.active_org_id from auth_sessions s
+        join users u on u.id = s.user_id
+       where u.email = ${email}
+    `;
+    expect(repaired.active_org_id).toBeTruthy();
+  });
+});

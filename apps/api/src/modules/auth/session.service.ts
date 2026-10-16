@@ -8,6 +8,9 @@ import { hashToken, issueToken } from "./tokens";
 export interface SessionContext {
   sessionId: string;
   userId: string;
+  /** The tenant this session acts in. Every org-scoped query is scoped to it. */
+  orgId: string;
+  role: string;
   impersonatedBy: string | null;
 }
 
@@ -54,17 +57,42 @@ function deviceLabel(ua: string | undefined): string | null {
 export class SessionService {
   constructor(@Inject(DB) private readonly db: Database) {}
 
-  async issue(userId: string, meta: RequestMeta, impersonatedBy: string | null = null) {
+  async issue(
+    userId: string,
+    meta: RequestMeta,
+    orgId: string | null = null,
+    impersonatedBy: string | null = null,
+  ) {
     const { raw, hash } = issueToken();
     const expires = new Date(Date.now() + AUTH_POLICY.sessionDays * 86_400_000);
+    const active = orgId ?? (await this.primaryOrg(userId))?.orgId ?? null;
     await this.db.execute(sql`
-      insert into auth_sessions (user_id, token_hash, device, kind, ip, expires_at, impersonated_by)
-      values (
+      insert into auth_sessions (
+        user_id, token_hash, device, kind, ip, expires_at, impersonated_by, active_org_id
+      ) values (
         ${userId}, ${hash}, ${deviceLabel(meta.userAgent)}, ${deviceKind(meta.userAgent)},
-        ${meta.ip ?? null}, ${expires.toISOString()}, ${impersonatedBy}
+        ${meta.ip ?? null}, ${expires.toISOString()}, ${impersonatedBy}, ${active}
       )
     `);
     return { token: raw, expiresAt: expires };
+  }
+
+  /**
+   * The organisation a session acts in by default.
+   *
+   * Read through app_orgs_for_user because memberships is behind a policy that compares
+   * org_id to app.org_id, and the value being looked up here is that very setting. It is
+   * the one lookup that cannot go through a policy without circling.
+   */
+  async orgsFor(userId: string): Promise<{ orgId: string; role: string }[]> {
+    const rows = await this.db.execute<{ org_id: string; role: string }>(sql`
+      select org_id, role from app_orgs_for_user(${userId})
+    `);
+    return rows.map((r) => ({ orgId: r.org_id, role: r.role }));
+  }
+
+  async primaryOrg(userId: string): Promise<{ orgId: string; role: string } | null> {
+    return (await this.orgsFor(userId))[0] ?? null;
   }
 
   /** Resolves a cookie to a session and records activity. Expired rows never resolve. */
@@ -72,17 +100,40 @@ export class SessionService {
     const rows = await this.db.execute<{
       id: string;
       user_id: string;
+      active_org_id: string | null;
       impersonated_by: string | null;
     }>(sql`
       update auth_sessions
          set last_active_at = now()
        where token_hash = ${hashToken(rawToken)}
          and expires_at > now()
-      returning id, user_id, impersonated_by
+      returning id, user_id, active_org_id, impersonated_by
     `);
     const row = rows[0];
     if (!row) return null;
-    return { sessionId: row.id, userId: row.user_id, impersonatedBy: row.impersonated_by };
+
+    // A session issued before this column existed, or one whose organisation the user is
+    // no longer a member of, is resolved now and written back rather than failing.
+    // Returning null would sign the learner out for a reason unrelated to their
+    // credentials. Membership is confirmed on every request, so removing someone from an
+    // organisation takes effect without waiting for their cookie to expire.
+    const memberships = await this.orgsFor(row.user_id);
+    const current =
+      memberships.find((m) => m.orgId === row.active_org_id) ?? memberships[0] ?? null;
+    if (!current) return null;
+    if (current.orgId !== row.active_org_id) {
+      await this.db.execute(sql`
+        update auth_sessions set active_org_id = ${current.orgId} where id = ${row.id}
+      `);
+    }
+
+    return {
+      sessionId: row.id,
+      userId: row.user_id,
+      orgId: current.orgId,
+      role: current.role,
+      impersonatedBy: row.impersonated_by,
+    };
   }
 
   async revoke(sessionId: string): Promise<void> {

@@ -100,7 +100,9 @@ export class AuthService {
     });
 
     await this.sendEmailToken(userId, input.email, "verify_email", AUTH_POLICY.verifyLinkHours * 60);
-    return this.sessions.issue(userId, meta);
+    // The organisation is handed over rather than looked up: it was created in the
+    // transaction above and is the only one this account can be in.
+    return this.sessions.issue(userId, meta, orgId);
   }
 
   async signIn(
