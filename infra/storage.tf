@@ -65,5 +65,5 @@ resource "azurerm_private_endpoint" "blob" {
 resource "azurerm_role_assignment" "api_blob" {
   scope                = azurerm_storage_account.artifacts.id
   role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = azurerm_container_app.api.identity[0].principal_id
+  principal_id         = azurerm_user_assigned_identity.api.principal_id
 }

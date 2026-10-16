@@ -18,7 +18,15 @@ resource "azurerm_container_app" "api" {
   tags                         = var.tags
 
   identity {
-    type = "SystemAssigned"
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.api.id]
+  }
+
+  // Pulls with the identity. There is no registry username or password anywhere in this
+  // stack, in CI, or in the app's configuration, because none is ever issued.
+  registry {
+    server   = azurerm_container_registry.main.login_server
+    identity = azurerm_user_assigned_identity.api.id
   }
 
   template {

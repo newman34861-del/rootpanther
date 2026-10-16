@@ -27,5 +27,5 @@ resource "azurerm_private_endpoint" "vault" {
 resource "azurerm_role_assignment" "api_secrets" {
   scope                = local.key_vault_id
   role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_container_app.api.identity[0].principal_id
+  principal_id         = azurerm_user_assigned_identity.api.principal_id
 }

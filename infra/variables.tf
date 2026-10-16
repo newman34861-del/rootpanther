@@ -45,8 +45,14 @@ variable "postgres_admin_user" {
 
 variable "api_image" {
   type        = string
-  description = "Container image for the API. Set once a registry exists."
+  description = "Container image for the API. The default is public so the stack can be applied before the first image is pushed."
   default     = "mcr.microsoft.com/k8se/quickstart:latest"
+}
+
+variable "ci_principal_id" {
+  type        = string
+  description = "Object id of the federated identity CI authenticates as. Left empty until the app registration exists, which keeps the stack applyable before CI is wired."
+  default     = ""
 }
 
 variable "tags" {
