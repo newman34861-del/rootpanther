@@ -10,6 +10,8 @@ const schema = z.object({
 
   APP_ORIGIN: z.string().url(),
   PORTAL_ORIGIN: z.string().url(),
+  /** Public origin of this API. Providers redirect back here, so it must match exactly. */
+  API_ORIGIN: z.string().url(),
   /** Cookies are issued on the parent domain so app, portal and api share a session. */
   COOKIE_DOMAIN: z.string().min(1),
   SESSION_SECRET: z.string().min(32),
